@@ -15,4 +15,5 @@ FROM debian:buster-slim
 RUN apt-get update && apt-get install -y sqlite3 libcurl4 && rm -rf /var/lib/apt/lists/*
 COPY --from=api-builder /usr/local/cargo/bin/noir /app/noir
 COPY --from=web-builder /usr/src/app/build/ /app/static/
+ENV RUST_LOG info
 CMD ["/app/noir", "--path", "/app/db.sqlite", "--alias", "/app/aliases.yaml", "server", "--root", "/app/static", "--download-to", "/app/download"]
