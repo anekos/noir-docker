@@ -1,6 +1,6 @@
-[submodule "web"]
-	path = web
-	url = git@github.com:anekos/noir-web
 [submodule "api"]
 	path = api
 	url = git@github.com:anekos/noir
+[submodule "client"]
+	path = client
+	url = git@github.com:anekos/noir-client.git

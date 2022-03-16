@@ -6,9 +6,9 @@ RUN cargo install --path .
 
 FROM node as web-builder
 WORKDIR /usr/src/app
-COPY web .
+COPY client .
 RUN yarn install
-RUN npm run build
+RUN yarn build
 
 
 FROM debian:buster-slim
