@@ -1,7 +1,7 @@
 FROM rust:1.54 as api-builder
 WORKDIR /usr/src/app
 COPY api .
-RUN cargo install --path .
+RUN cargo install --locked --path .
 
 
 FROM node as web-builder
