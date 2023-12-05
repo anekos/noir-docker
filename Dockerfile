@@ -1,20 +1,12 @@
-FROM rust:1.54 as api-builder
-WORKDIR /usr/src/app
-COPY api .
-RUN cargo install --locked --path .
+FROM python:3.12.0-bullseye
 
+WORKDIR /app/api
 
-FROM node as web-builder
-WORKDIR /usr/src/app
-COPY client .
-RUN yarn install
-RUN yarn build
+RUN pip install --upgrade pip setuptools
 
+COPY noir_api-0.1.0-py3-none-any.whl /tmp/noir_api-0.1.0-py3-none-any.whl
+RUN pip install /tmp/noir_api-0.1.0-py3-none-any.whl -t /app/api
 
-FROM debian:buster-slim
-RUN apt-get update && apt-get install -y sqlite3 libcurl4 && rm -rf /var/lib/apt/lists/*
-COPY --from=api-builder /usr/local/cargo/bin/noir /app/noir
-COPY --from=web-builder /usr/src/app/build/ /app/static/
-ENV RUST_LOG info
-ENV RUST_BACKTRACE 1
-CMD ["/app/noir", "--path", "/app/db.sqlite", "--alias", "/app/aliases.yaml", "server", "--root", "/app/static", "--download-to", "/app/download"]
+ENV PYTHONPATH /app/api
+
+CMD ["python", "bin/uvicorn", "noir_api.server.app:app", "--host", "0.0.0.0"]
