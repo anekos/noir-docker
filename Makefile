@@ -1,5 +1,6 @@
 APP_TEMP := $(shell mktemp -d)
 API_REPOS = ../api
+WEB_REPOS = ../web
 
 WHL_FILENAME=noir_api-0.1.0-py3-none-any.whl
 
@@ -8,6 +9,7 @@ WHL_FILENAME=noir_api-0.1.0-py3-none-any.whl
 build:
 	( cd $(API_REPOS) && rye build )
 	cp $(API_REPOS)/dist/$(WHL_FILENAME) $(WHL_FILENAME)
+	( cd $(WEB_REPOS) &&  elm make src/Main.elm --output build/elm.js )
 	docker build -t noir .
 
 shell:
