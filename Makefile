@@ -4,7 +4,7 @@ WEB_REPOS = ../web
 
 WHL_FILENAME=noir_api-0.1.0-py3-none-any.whl
 
-.PHONY: build shell run
+.PHONY: build shell run deploy
 
 build:
 	( cd $(API_REPOS) && rye build )
@@ -42,3 +42,8 @@ run:
 		-v $(IMAGE_DIR):$(IMAGE_DIR) \
 		--tty \
 		noir
+
+
+deploy:
+	docker tag noir irmagi.local.anekos.com:5000/noir
+	docker push irmagi.local.anekos.com:5000/noir
